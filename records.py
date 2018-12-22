@@ -87,7 +87,11 @@ def fetch_city_name_id(city_id='', city_name='', db_name='imd_weather_record'):
         if(city_id):
             if(not __validate_city_id__(city_id)):
                 raise Exception('city id not validated')
-            resp.update({city_id: db_handle.get(city_id.encode('utf-8'), b'').decode('utf-8').split(';')})
+            tmp = db_handle.get(city_id.encode('utf-8'), b'')
+            if(tmp):
+                resp.update({city_id: tmp.decode('utf-8').split(';')})
+            else:
+                resp = {'status': 'record not found'}
         elif(city_name):
             resp.update(__match_city_name__(city_name, db_handle.iterator()))
         else:
