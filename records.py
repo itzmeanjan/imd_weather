@@ -53,7 +53,7 @@ def __format_db_entry__(data):
     return formatted
 
 
-def store_city_name_id(data, db_name='imd_weather_record'):
+def store_city_name_id(data, db_name='imd_city_db'):
     '''
         Stores City Names, IDs and correspoding links into a local levelDB.
         City ID is used as key value.
@@ -73,7 +73,7 @@ def store_city_name_id(data, db_name='imd_weather_record'):
     return resp
 
 
-def fetch_city_name_id(city_id='', city_name='', db_name='imd_weather_record'):
+def fetch_city_name_id(city_id='', city_name='', db_name='imd_city_db'):
     '''
         City Names, IDs and corresponding links are fetched from local levelDB.
         If you pass city_id and city_name both, city_id would be chosen over city_name,

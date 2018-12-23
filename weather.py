@@ -61,11 +61,11 @@ def __parse_content__(content):
         handle = BeautifulSoup(content, features='lxml')
         tables = handle.findAll('table')
         if(tables[0].find('td').findChild('img')):
-            parsed.update({'location_image': tables[0].find('td').find('img').get('src')})
+            parsed.update({'location_on_map_image': tables[0].find('td').find('img').get('src')})
         parsed.update({'past_24_hours_weather': __extract_past_24_hours_weather_data__(tables[1])})
         parsed.update({'7_days_forecast': __extract_7_days_forecast__(tables[2])})
         if(tables[3].find('td').findChild('img')):
-            parsed.update({'summary_image': tables[3].find('td').find('img').get('src')})
+            parsed.update({'weather_graph': tables[3].find('td').find('img').get('src')})
     except Exception as e:
         parsed = {'error': str(e)}
     return parsed
@@ -84,7 +84,7 @@ def __get_content__(base_url):
         return {'error': str(e)}
 
 
-def fetch(city_id, override_check=False, db_name='imd_weather_record', base_url='http://city.imd.gov.in/citywx/city_weather.php'):
+def fetch(city_id, override_check=False, db_name='imd_city_db', base_url='http://city.imd.gov.in/citywx/city_weather.php'):
     '''
         Fetches weather info of certain city, designated by city_id, from imd website and returns in parsed form.
         set `override_check` to True, if you have'nt yet stored city name & id, into local database.
@@ -100,4 +100,4 @@ def fetch(city_id, override_check=False, db_name='imd_weather_record', base_url=
 
 if __name__ == '__main__':
     print('[!]This module is designed to be used as a backend handler')
-    exit(0)
+    exit(0)     

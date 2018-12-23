@@ -36,12 +36,16 @@ A simple python API, helps you to fetch City Weather data from Indian Meteorolog
     print(store_city_name_id(data)) # data = imd_weather.city_info.fetch()
     '''
       Fetches stored data from local database.
+      
+      Remember, I've set db_name = 'imd_city_db', if you want to use some different name for your database,
+      feel free to use that for db_name parameter.
+
+      If you pass city_name, all possible matches will be taken care of and returned. From returned dictionary, find the
+      required one.
+
+      If you pass a city_id, only full match for that city_id will be performed.
     '''
     print(fetch_city_name_id()) # will return all available records
-    # remember, I've set db_name = 'imd_weather_record', if you want to use some different name for your database,
-    # feel free to use that for db_name parameter.
-    # if you pass city_name, all possible matches will be taken care of and returned. From returned dictionary, find the
-    # required one.
   ```
   
   #### imd_weather.weather :
