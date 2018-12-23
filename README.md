@@ -55,8 +55,108 @@ A simple python API, helps you to fetch City Weather data from Indian Meteorolog
     print(fetch_weather('xxxxx')) # city_id, mandatory argument.
   ```
   
+ ## Update ::
+   
+  - As per latest commit, you can easily install this script and invoke it from command line for fetching Weather data from IMD.
+  - I've written two new scripts and put them in this repo, which are **install.py** and **imd_weather_app.py**.
+  - **install.py** will help you to install the script **imd_weather_app.py**.
+  - After that **imd_weather_app.py** will become invokabale from command line.
+  - I've tested installation only on Ubuntu, Fedora, Mint and Debian, where it works fine.
+  - Feel free to run installation on other systems, and let me know whether it works or not.
+  - I've written **install.py** for running installation procedure only for GNU/Linux based systems.
   
-  Now thanks to IMD for providing the service. More info can be found [here](http://imd.gov.in/Welcome%20To%20IMD/Welcome.php).
+ ### Installation :
+
+  Following steps will lead you to installation of **imd_weather_app.py**
+  
+  - First Clone this [repo](https://github.com/itzmeanjan/imd_weather/) at an appropriate location in your computer.
+  
+    ```
+      >> git clone https://github.com/itzmeanjan/imd_weather/
+    ```
+  
+  - Get into imd_weather directory.
+  
+    ```
+      >> cd imd_weather
+    ```
+  
+  - Make **install.py** executable.
+  
+    ```
+      >> chmod +x install.py
+    ```
+    
+  - Execute **install.py**.
+  
+    ```
+      >> ./install.py
+    ```
+  
+  - This will create a directory named **.imd_directory**, under **/home/your-user-name**,
+  which is set as value of your **HOME** environment variable. All required files will 
+  be copied to that directory.
+  
+  - Now you need to append **:$HOME/.imd_directory** to your **PATH** variable.
+  
+  - Open ~/.bash_profile using your favourite text editor.
+    ```
+      >> nano ~/.bash_profile
+      
+      or
+      
+      >> gedit ~/.bash_profile
+    ```
+  
+  - Append **export PATH=$PATH:$HOME/.imd_weather** at end and save the file.
+  
+    ```
+      export PATH=$PATH:$HOME/.imd_weather
+    ```
+  
+  - If you find there already exists some command looking like previous one, just 
+  append **:$HOME/.imd_weather** where the **export PATH=$PATH*** line ends.
+  
+  - Now you need to run
+  
+    ```
+      >> source ~/.bash_profile
+    ```
+  
+  - So **PATH** variable has got updated, which you can check by running
+  
+    ```
+      >> echo $PATH
+    ```
+  
+  - It's time for a reboot. Reboot your system and log into it.
+  
+  - Check PATH variable value from any terminal, you'll find **:$HOME/.imd_weather** appended.
+  
+  - Try **imd_weather_app.py** from any where in your directory tree. It'll work.
+    ```
+      >> imd_weather_app.py
+    ```
+  - As you've added **:$HOME/.imd_weather** to your PATH variable, you can now invoke **imd_weather_app.py** 
+  from any where in directory tree.
+  
+  So, installation complete.
+ 
+  By the way, installation isn't compulsory for using this script. You can still use it by executing 
+    ```
+      >> ./imd_weather_app.py
+    ```
+  when you're in imd_weather directory.
+  
+ 
+ As **imd_weather_app.py** uses **colorama**, a python module for coloring terminal text, you might need to install that using pip or your OS package manager. For installing it using pip, run
+ 
+  ```
+    >> pip3 install colorama --user
+  ```
+ 
+  
+  Finally thanks to IMD for providing the service. More info can be found [here](http://imd.gov.in/Welcome%20To%20IMD/Welcome.php).
   Before you start using it, read below ...
   
   
