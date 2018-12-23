@@ -61,45 +61,45 @@ A simple python API, helps you to fetch City Weather data from Indian Meteorolog
   
  ## Update ::
    
-  - As per latest commit, you can easily install this script and invoke it from command line for fetching Weather data from IMD.
-  - I've written two new scripts and put them in this repo, which are **install.py** and **imd_weather_app.py**.
+  - Now you can easily install **imd_weather_app.py** and invoke it from command line for fetching Weather data from IMD.
+  - I've written two new scripts and put them in this repo, which are **[install.py](https://github.com/itzmeanjan/imd_weather/blob/master/install.py)** and **[imd_weather_app.py](https://github.com/itzmeanjan/imd_weather/blob/master/imd_weather_app.py)**.
   - **install.py** will help you to install the script **imd_weather_app.py**.
   - After that **imd_weather_app.py** will become invokabale from command line.
   - I've tested installation only on Ubuntu, Fedora, Mint and Debian, where it works fine.
   - Feel free to run installation on other systems, and let me know whether it works or not.
   - I've written **install.py** for running installation procedure only for GNU/Linux based systems.
   
- ### Installation :
+  ### Installation :
 
-  Following steps will lead you to installation of **imd_weather_app.py**
+   Following steps will lead you to installation of **imd_weather_app.py**
   
-  - First Clone this [repo](https://github.com/itzmeanjan/imd_weather/) at an appropriate location in your computer.
+   - First Clone this [repo](https://github.com/itzmeanjan/imd_weather/) at an appropriate location in your computer.
   
-    ```
-      >> git clone https://github.com/itzmeanjan/imd_weather/
-    ```
+     ```
+       >> git clone https://github.com/itzmeanjan/imd_weather/
+     ```
   
-  - Get into imd_weather directory.
+   - Get into imd_weather directory.
   
-    ```
-      >> cd imd_weather
-    ```
+     ```
+       >> cd imd_weather
+     ```
   
-  - Make **install.py** executable.
+   - Make **install.py** executable.
   
-    ```
-      >> chmod +x install.py
-    ```
+     ```
+       >> chmod +x install.py
+     ```
     
-  - Execute **install.py**.
+   - Execute **install.py**.
   
-    ```
-      >> ./install.py
-    ```
-  
-  - This will create a directory named **.imd_directory**, under **/home/your-user-name**,
-  which is set as value of your **HOME** environment variable. All required files will 
-  be copied to that directory.
+     ```
+       >> ./install.py
+     ```
+   
+   - This will create a directory named **.imd_directory**, under **/home/your-user-name**,
+   which is set as value of your **HOME** environment variable. All required files will 
+   be copied to that directory.
   
   - Now you need to append **:$HOME/.imd_directory** to your **PATH** variable.
   
