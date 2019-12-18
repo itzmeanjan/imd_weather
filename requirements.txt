@@ -1,0 +1,4 @@
+plyvel==1.1.0
+colorama==0.4.3
+requests==2.21.0
+beautifulsoup4==4.8.1

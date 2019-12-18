@@ -1,5 +1,17 @@
 #!/usr/bin/python3
 
+from __future__ import annotations
+from colorama import Fore, init as color_init
+from colorama.initialise import reset_all
+from os import environ
+from os.path import join
+import re
+from sys import platform
+from subprocess import run
+from city import fetch as fetch_city
+from records import fetch_city_name_id, store_city_name_id
+from weather import fetch as fetch_weather
+
 '''
     If you're using this script from a certain directory for the very first time,
     make sure you choose 1 in main menu and create local database, holding City info.
@@ -7,32 +19,10 @@
     If you've already installed it, by executing install.py, then you're good to go.
 '''
 
-try:
-    from colorama import Fore, init as color_init
-    from colorama.initialise import reset_all
-    from os import environ
-    from os.path import join
-    from install import __is_init_setup_done__
-    import re
-    from sys import platform
-    from subprocess import run
-    from city_info import fetch as fetch_city
-    from records import fetch_city_name_id, store_city_name_id
-    from weather import fetch as fetch_weather
-except ImportError as e:
-    print('[!Module Unavailable : {}'.format(str(e)))
-    exit(1)
-
-
-def __is_os_supported__():
-    regex = re.compile(r'^(linux)$', flags=re.I)
-    if(regex.match(platform)):
-        return True
-    return False
-
 
 def __fetch_a_certain_city__(db_name):
-    tmp = input('[?]Search by\n\t1. CityName ( finds all possible matches )\n\t2. CityID\n>> ')
+    tmp = input(
+        '[?]Search by\n\t1. CityName ( finds all possible matches )\n\t2. CityID\n>> ')
     resp = {}
     try:
         tmp = int(tmp)
@@ -61,7 +51,7 @@ def __fetch_a_certain_city__(db_name):
     return resp
 
 
-def __get_menu__():
+def __get_menu__() -> int:
     ch = input('[+]Main Menu:\n\t1. Fetch City Names\n\t2. Fetch a certain City\n\t3. Fetch Weather data of a City\n[?]Choose one >> ')
     try:
         ch = int(ch)
@@ -69,13 +59,13 @@ def __get_menu__():
         print('[!]Error : {}'.format(str(e)))
         ch = -1
         return ch
-    if(ch not in range(1, 4)):
+    if ch not in range(1, 4):
         print('[!]Bad input')
         ch = -1
     return ch
 
 
-def app(db_name='imd_city_db'):
+def app():
     run('clear')
     print('[+]City Weather ::\n\n***Choose 1 from below list for first time use***\n')
     ch = __get_menu__()
@@ -84,27 +74,28 @@ def app(db_name='imd_city_db'):
     if(ch == 1):
         resp = fetch_city()
         if(not resp.get('error')):
-            print('[+]Status after storing record : {}'.format(store_city_name_id(resp, db_name=db_name)))
+            print(
+                '[+]Status after storing record : {}'.format(store_city_name_id(resp, db_name=db_name)))
             print('\n')
             for i, j in resp.items():
                 print('\t{}\n'.format(i))
                 for k in j:
-                    for l, m in k.items():  
+                    for l, m in k.items():
                         print('\t\t\'{}\'  |  {}'.format(l, m))
                 print('\n')
         else:
             print('[!]{} -> {}\n'.format('Error', resp.get('error', ':/')))
-            resp = fetch_city_name_id(db_name=db_name)
+            resp = fetch_city_name_id()
             for i, j in resp.items():
                 print('\t\t{}\t---\t{}'.format(i, j))
     elif(ch == 2):
-        resp = __fetch_a_certain_city__(db_name)
+        resp = __fetch_a_certain_city__()
         print('\n')
         for i, j in resp.items():
             print('\t{}\t---\t{}'.format(i, j))
         print('\n')
     else:
-        resp = __fetch_a_certain_city__(db_name)
+        resp = __fetch_a_certain_city__()
         print('\n')
         if(resp.get('error')):
             print('{}\n'.format(resp))
@@ -122,12 +113,13 @@ def app(db_name='imd_city_db'):
                 if(tmp not in range(1, len(resp.keys())+1)):
                     print('[!]Bad input')
                     return
-                resp = {list(resp.keys())[tmp-1]: resp.get(list(resp.keys())[tmp-1])}
+                resp = {list(resp.keys())[tmp-1]
+                             : resp.get(list(resp.keys())[tmp-1])}
             else:
                 print('[+]Match found :\n\t{}\n'.format(resp))
             print('[+]Fetching data ...\n')
             city_id = list(resp.keys())[0]
-            weather = fetch_weather(city_id, db_name=db_name)
+            weather = fetch_weather(city_id)
             if(weather.get('error')):
                 print('{}\n'.format(weather))
                 return
@@ -136,20 +128,24 @@ def app(db_name='imd_city_db'):
             color_init()
             for i, j in weather.get(city_id).items():
                 if(i == 'past_24_hours_weather'):
-                    print('\t{}{}{} :\n'.format(Fore.GREEN, ' '.join([x.capitalize() for x in i.split('_')]), Fore.RESET))
+                    print('\t{}{}{} :\n'.format(Fore.GREEN, ' '.join(
+                        [x.capitalize() for x in i.split('_')]), Fore.RESET))
                     for k, l in j.items():
                         if(k.startswith('Departure from Normal(oC)')):
                             k = 'Departure from Normal(oC)'
-                        print('\t\t{:<90} ---  {}{}{}'.format(k, Fore.RED, l, Fore.RESET))
+                        print('\t\t{:<90} ---  {}{}{}'.format(k,
+                                                              Fore.RED, l, Fore.RESET))
                     print('\n')
                 elif(i == '7_days_forecast'):
-                    print('\t{}{}{} :\n'.format(Fore.GREEN, ' '.join([x.capitalize() for x in i.split('_')]), Fore.RESET))
+                    print('\t{}{}{} :\n'.format(Fore.GREEN, ' '.join(
+                        [x.capitalize() for x in i.split('_')]), Fore.RESET))
                     for k in j:
                         k[3] = Fore.MAGENTA+pref_it+k[3]+Fore.RESET
                         print('\t\t{} | {} | {} | {}'.format(*k))
                     print('\n')
                 else:
-                    print('\t{}{}{}\t---\t{}\n'.format(Fore.GREEN, ' '.join([x.capitalize() for x in i.split('_')]), Fore.RESET, Fore.MAGENTA+pref_it+j+Fore.RESET))
+                    print('\t{}{}{}\t---\t{}\n'.format(Fore.GREEN, ' '.join([x.capitalize(
+                    ) for x in i.split('_')]), Fore.RESET, Fore.MAGENTA+pref_it+j+Fore.RESET))
             reset_all()
             print('[+]End\n')
     return
@@ -157,13 +153,7 @@ def app(db_name='imd_city_db'):
 
 if __name__ == '__main__':
     try:
-        if(not __is_os_supported__()):
-            print('[!]You need to be on Linux to run this program :)\n')
-            exit(0)
-        if(__is_init_setup_done__()):
-            app(db_name=join(environ.get('HOME'), '.imd_weather', 'imd_city_db'))
-        else:
-            app()
+        app()
     except KeyboardInterrupt:
         print('\n[!]Terminated')
     finally:
