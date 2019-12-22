@@ -40,6 +40,14 @@ class State:
         idx = self._pick(0, len(self.stations) - 1, _id)
         return self.stations[idx] if idx != -1 else None
 
+    def pickByName(self, name: str) -> Station:
+        obj = None
+        for i in self.stations:
+            if i.name == name:
+                obj = i
+                break
+        return obj
+
     @staticmethod
     def fromJSON(data: List[Dict[str, str]], state: str) -> State:
         stateObj = State(state, [])
