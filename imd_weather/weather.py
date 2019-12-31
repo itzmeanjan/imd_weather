@@ -5,17 +5,22 @@ from bs4 import BeautifulSoup, Tag
 from requests import get
 from urllib.parse import urljoin
 from typing import Dict, Any, List, Tuple
+from .forecast import Forecast, ForecastData
 
 
-def _forecast(data: Tag) -> List[Tuple[str, str, str, str, str]]:
+def _forecast(data: Tag) -> Forecast:
     '''
         Extracts next 7 day's forecast for a certain city
     '''
-    return list(map(lambda e: tuple(map(lambda e:
-                                        urljoin('http://city.imd.gov.in/citywx/',
-                                                e.find('img').get('src')) if e.findChild('img')
-                                        else e.getText().strip(),
-                                        e.findAll('td'))), data.findAll('tr')[2:]))
+    return Forecast(
+        list(map(lambda e:
+                 ForecastData(
+                     *tuple(map(lambda e:
+                                urljoin('http://city.imd.gov.in/citywx/',
+                                        e.find('img').get('src')) if e.findChild('img')
+                                else e.getText().strip(),
+                                e.findAll('td')))
+                 ), data.findAll('tr')[2:])))
 
 
 def _history(data: Tag) -> Dict[str, str]:
