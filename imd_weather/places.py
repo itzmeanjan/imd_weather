@@ -4,11 +4,12 @@ from __future__ import annotations
 from requests import get
 from re import compile as reg_compile
 from bs4 import BeautifulSoup
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from json import dump, load
 from .state import State
 from .station import Station
 from urllib.parse import urljoin
+from functools import reduce
 
 
 class Places(object):
@@ -44,6 +45,17 @@ class Places(object):
     def pick(self, name: str) -> State:
         idx = self._pick(0, len(self.states) - 1, name)
         return self.states[idx] if idx != -1 else None
+
+    def pickByStationName(self, name: str) -> List[Tuple[str, str]]:
+        return reduce(lambda acc, cur: acc + cur.pickByName(name), self.states, [])
+
+    def pickByStationId(self, _id: int) -> Station:
+        obj = None
+        for i in self.states:
+            obj = i.pick(_id)
+            if obj:
+                break
+        return obj
 
     @staticmethod
     def fromJSON(source: str) -> Places:

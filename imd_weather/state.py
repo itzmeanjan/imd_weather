@@ -3,6 +3,7 @@
 from __future__ import annotations
 from typing import List, Dict
 from .station import Station
+from re import compile as reg_compile, I
 
 
 class State:
@@ -41,12 +42,13 @@ class State:
         return self.stations[idx] if idx != -1 else None
 
     def pickByName(self, name: str) -> Station:
-        obj = None
+        possibleMatches = []
+        reg = reg_compile(r'({})'.format(name), flags=I)
         for i in self.stations:
-            if i.name == name:
-                obj = i
-                break
-        return obj
+            _match = reg.search(i.name)
+            if _match:
+                possibleMatches.append((i.id, i.name))
+        return possibleMatches
 
     @staticmethod
     def fromJSON(data: List[Dict[str, str]], state: str) -> State:

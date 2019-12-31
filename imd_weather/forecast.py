@@ -6,8 +6,13 @@ from typing import List, Dict, Any
 
 
 class ForecastData(object):
+    '''
+        Holds forecast data for a certain date
+        i.e. minimum temp, maximum temp, weather condition & corresponding depiction image
+    '''
+
     def __init__(self, date: str, _min: str, _max: str, img: str, stat: str):
-        reg = reg_compile(r'^(\d*\.\d{1,})$')
+        reg = reg_compile(r'^(-?\d*\.?\d{1,})$')
         self.date = date
         tmp = reg.search(_min)
         self.min = float(tmp.group()) if tmp else None
@@ -17,6 +22,10 @@ class ForecastData(object):
         self.stat = stat
 
     def toJSON(self) -> Dict[str, Any]:
+        '''
+            Helps in converting forecast of certain date into python dictionary,
+            so that it can easily be written into JSON
+        '''
         return {
             'date': self.date,
             'min': self.min,
@@ -27,10 +36,18 @@ class ForecastData(object):
 
 
 class Forecast(object):
+    '''
+        Simply a list based wrapper for holding all forecast
+        for all available dates for a certain place
+    '''
+
     def __init__(self, data: List[ForecastData]):
         self.data = data
 
     def toJSON(self) -> List[Dict[str, Any]]:
+        '''
+            Converts to JSON
+        '''
         return [i.toJSON() for i in self.data]
 
 

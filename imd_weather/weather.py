@@ -6,6 +6,8 @@ from requests import get
 from urllib.parse import urljoin
 from typing import Dict, Any, List, Tuple
 from .forecast import Forecast, ForecastData
+from .history import History
+from json import dump
 
 
 def _forecast(data: Tag) -> Forecast:
@@ -29,8 +31,9 @@ def _history(data: Tag) -> Dict[str, str]:
     '''
     data = data.findAll('td')[1:]
     gap = 2
-    return list(map(lambda e: (e[0].getText().strip(), e[1].getText().strip()),
-                    map(lambda e: data[e:e+gap], range(0, len(data), gap))))
+    return History(
+        *list(map(lambda e: e[1].getText().strip(),
+                  map(lambda e: data[e:e+gap], range(0, len(data), gap)))))
 
 
 def _parse(content: str) -> Dict[str, Any]:
@@ -74,7 +77,19 @@ def _get(url: str) -> Dict[str, Any]:
 
 
 def fetch(url: str) -> Dict[str, Any]:
+    '''
+        Collects weather data for specified City,
+        by parsing IMD ( Indian Meterological Department ) website
+    '''
     return _get(url)
+
+
+def writeToJSON(data: Dict[str, Any], sink: str):
+    '''
+        Writes collected data into specified JSON file
+    '''
+    with open(sink, mode='w') as fd:
+        dump(data, fd, ensure_ascii=False, indent=4)
 
 
 if __name__ == '__main__':
