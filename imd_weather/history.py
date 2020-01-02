@@ -24,10 +24,14 @@ class History(object):
         self.relativeHumidityAt08_30 = float(tmp.group()) if tmp else None
         tmp = reg.search(relativeHumidityFinal)
         self.relativeHumidityAt17_30 = float(tmp.group()) if tmp else None
-        self.sunset = time(*[int(i, base=10) for i in sunset.split(':')])
-        self.sunrise = time(*[int(i, base=10) for i in sunrise.split(':')])
-        self.moonset = time(*[int(i, base=10) for i in moonset.split(':')])
-        self.moonrise = time(*[int(i, base=10) for i in moonrise.split(':')])
+        self.sunset = time(*[int(i.strip(), base=10)
+                             for i in sunset.split(':')])
+        self.sunrise = time(*[int(i.strip(), base=10)
+                              for i in sunrise.split(':')])
+        self.moonset = time(*[int(i.strip(), base=10)
+                              for i in moonset.split(':')])
+        self.moonrise = time(*[int(i.strip(), base=10)
+                               for i in moonrise.split(':')])
 
     def toJSON(self) -> Dict[str, Any]:
         return {
@@ -39,11 +43,18 @@ class History(object):
             'rainfall': self.rainfall,
             'relativeHumidityAt08:30': self.relativeHumidityAt08_30,
             'relativeHumidityAt17:30': self.relativeHumidityAt17_30,
-            'sunset': self.sunset,
-            'sunrise': self.sunrise,
-            'moonset': self.moonset,
-            'moonrise': self.moonrise
+            'sunset': str(self.sunset),
+            'sunrise': str(self.sunrise),
+            'moonset': str(self.moonset),
+            'moonrise': str(self.moonrise)
         }
+
+    @staticmethod
+    def fromJSON(data: Dict[str, Any]) -> History:
+        _hist = History(data.get('max'), data.get('departFromMax'), data.get('min'), data.get('departFromMin'), data.get('rainfall'), data.get(
+            'relativeHumidityAt08:30'), data.get('relativeHumidityAt17:30'), data.get('sunset'), data.get('sunrise'), data.get('moonset'), data.get('moonrise'))
+        _hist.timestamp = data.get('timestamp')
+        return _hist
 
 
 if __name__ == '__main__':

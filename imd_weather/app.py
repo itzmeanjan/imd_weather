@@ -9,7 +9,7 @@ import re
 from sys import platform
 from subprocess import run
 from .places import Places
-from weather import fetch as fetch_weather
+from .fetch_weather import fetch as fetchIt
 
 
 def app():

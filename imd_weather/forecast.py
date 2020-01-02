@@ -34,6 +34,10 @@ class ForecastData(object):
             'status': self.stat
         }
 
+    @staticmethod
+    def fromJSON(data: Dict[str, Any]) -> ForecastData:
+        return ForecastData(data.get('date'), data.get('min'), data.get('max'), data.get('img'), data.get('status'))
+
 
 class Forecast(object):
     '''
@@ -49,6 +53,10 @@ class Forecast(object):
             Converts to JSON
         '''
         return [i.toJSON() for i in self.data]
+
+    @staticmethod
+    def fromJSON(data: List[Dict[str, Any]]) -> Forecast:
+        return Forecast([ForecastData.fromJSON(i) for i in data])
 
 
 if __name__ == '__main__':
